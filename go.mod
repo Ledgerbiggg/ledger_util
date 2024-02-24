@@ -1,4 +1,4 @@
-module github.com/Ledgerbiggg/ledger_util
+module github.com/ledgerbiggg/ledger_util
 
 go 1.21
 
