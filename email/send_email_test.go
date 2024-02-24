@@ -5,15 +5,15 @@ import (
 )
 
 func TestSendUtil_IsCCOrBCCSend(t *testing.T) {
-	err := NewSimpleSendUtil("228664584@qq.com",
-		"228664584@qq.com",
+	err := NewSimpleSendUtil("xxx@qq.com",
+		"xxx@qq.com",
 		"test",
 		"test",
 		nil,
 		&User{
 			Identity: "",
-			Username: "228664584@qq.com",
-			Password: "usuzpuerbdddbgeb",
+			Username: "xxx@qq.com",
+			Password: "xxx",
 		},
 		QQ).IsCCOrBCCSend(true, false)
 
@@ -23,17 +23,17 @@ func TestSendUtil_IsCCOrBCCSend(t *testing.T) {
 }
 
 func TestSendUtil_SimpleSend(t *testing.T) {
-	util := NewCCSendUtil("228664584@qq.com",
-		"228664584@qq.com",
+	util := NewCCSendUtil("xxx@qq.com",
+		"xxx@qq.com",
 		"test",
 		"test",
 		nil,
 		&User{
 			Identity: "",
-			Username: "228664584@qq.com",
-			Password: "usuzpuerbdddbgeb",
+			Username: "xxx@qq.com",
+			Password: "xxx",
 		},
-		[]string{"228664584@qq.com", "427945607@qq.com"},
+		[]string{"xxx@qq.com", "xxx@qq.com"},
 		QQ)
 	err := util.IsCCOrBCCSend(true, true)
 
