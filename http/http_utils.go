@@ -2,28 +2,31 @@ package test
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"reflect"
 )
 
 type HttpDos struct {
 	url     string
+	param   any
 	body    []byte
 	headers map[string]string
 }
 
-func NewHttpDos(url string, body []byte, headers map[string]string) *HttpDos {
-	return &HttpDos{url: url, body: body, headers: headers}
+func NewHttpDos(url string, param any, body []byte, headers map[string]string) *HttpDos {
+	return &HttpDos{url: url, param: param, body: body, headers: headers}
 }
 
 // Get get请求
 func (h *HttpDos) Get() ([]byte, error) {
+	url, err := montageURL(h.url, h.param)
+	if err != nil {
+		return nil, err
+	}
 	// 创建一个 GET 请求
-	req, err := http.NewRequest("GET", h.url, nil)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -50,15 +53,18 @@ func (h *HttpDos) Get() ([]byte, error) {
 	return body, nil
 }
 
-// MontageURL 拼接url
-func MontageURL(oldUrl string, data interface{}) (string, error) {
+// montageURL 拼接url
+func montageURL(oldUrl string, data interface{}) (string, error) {
+	if data == nil {
+		return oldUrl, nil
+	}
 	var suf = oldUrl + "?"
 	// 使用反射遍历 data
-	v := reflect.ValueOf(data).Elem()
-	if v.Kind() != reflect.Struct {
-		log.Println("data is not a struct")
-		return "", errors.New("data is not a struct")
+	v := reflect.ValueOf(data)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
 	}
+
 	for i := 0; i < v.NumField(); i++ {
 		f := v.Field(i)
 		fieldName := v.Type().Field(i).Name
